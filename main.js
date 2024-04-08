@@ -4,10 +4,10 @@ const difficulties = {
 	"hard": "Difícil"
 };
 
-let tempToken = "";
+let tempToken;
 let QUESTIONS = [];
 let currentQuestion = 0;
-const totalQuestions = 2;
+const totalQuestions = 25;
 
 function setupQuestion(index) {
 	document.querySelector(".question-container").classList.remove("hidden");
@@ -16,6 +16,7 @@ function setupQuestion(index) {
 	const questionElement = document.querySelector('#question');
 	const answersElement = document.querySelector('#answers');
 	
+	document.querySelector('#question-category').textContent = question.category;
 	document.querySelector('#question-number').textContent = `Pergunta ${index + 1}/${QUESTIONS.length}`;
 	document.querySelector('#question-difficulty').textContent = difficulties[question.difficulty];
 
@@ -24,10 +25,10 @@ function setupQuestion(index) {
 	answersElement.innerHTML = '';
 	
 	question.answers.forEach((answer, index) => {
-		const answerElement = document.createElement('div');
+		const answerElement = document.createElement('li');
 		answerElement.innerHTML = `
-			<input type="radio" name="answer" value="${index}">
-			${answer}
+			<input type="radio" name="answer" id="answer-${index}" value="${index}">
+			<label for="answer-${index}">${answer}</label>
 		`;
 		
 		answersElement.appendChild(answerElement);
@@ -102,6 +103,8 @@ function finishQuiz() {
 }
 
 async function loadQuestions() {
+	const category = document.querySelector('#category').value;
+
 	document.querySelector('#score').classList.add('hidden');
 
 	if (!tempToken) {
@@ -112,7 +115,7 @@ async function loadQuestions() {
 		}
 	}
 
-	fetch(`https://tryvia.ptr.red/api.php?amount=${totalQuestions}&token=${tempToken}`)
+	fetch(`https://tryvia.ptr.red/api.php?amount=${totalQuestions}&token=${tempToken}&category=${category}`)
 		.then((response) => response.json())
 		.then((data) => {
 			currentQuestion = 0;
@@ -125,6 +128,7 @@ async function loadQuestions() {
 					question: question.question,
 					answers,
 					correct: answers.indexOf(question.correct_answer),
+					category: question.category,
 					difficulty: question.difficulty,
 				});
 			}
@@ -135,4 +139,25 @@ async function loadQuestions() {
 document.querySelector('#previous').addEventListener('click', previousQuestion);
 document.querySelector('#next').addEventListener('click', nextQuestion);
 document.querySelector('#restart').addEventListener('click', loadQuestions);
-document.addEventListener('DOMContentLoaded', loadQuestions);
+document.addEventListener('DOMContentLoaded', async () => {
+	await fetch("https://tryvia.ptr.red/api_category.php")
+		.then((response) => response.json())
+		.then((data) => {
+			const categoryElement = document.querySelector('#category');
+			categoryElement.innerHTML = '';
+
+			data.trivia_categories.sort((a, b) => a.name.localeCompare(b.name));
+			data.trivia_categories.unshift({ id: 0, name: 'Todas as categorias' });
+
+			for (const category of data.trivia_categories) {
+				const option = document.createElement('option');
+				option.value = category.id;
+				option.textContent = category.name;
+				categoryElement.appendChild(option);
+			}
+		});
+	
+	loadQuestions();
+});
+
+document.querySelector('#category').addEventListener('change', loadQuestions);

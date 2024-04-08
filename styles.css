@@ -1,0 +1,10 @@
+li {
+	margin: 0 auto;
+	padding: 5px 10px;
+	width: 100%;
+	border-radius: 10px;
+}
+
+li:has(> input:checked) {
+	background: #3b82f6;
+}
