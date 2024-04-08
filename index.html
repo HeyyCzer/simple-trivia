@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head class="w-full">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=7, initial-scale=1.0">
+	<title>Quiz</title>
+
+	<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="w-full bg-gray-800">
+	<div class="header flex text-center bg-blue-500 py-5">
+		<h1 class="text-xl mx-auto font-semibold tracking-widest">Quiz</h1>
+	</div>
+
+	<div class="question-container text-center text-gray-500 mt-8 hidden">
+		<div class="mb-4">
+			<h6 id="question-category" class="bg-blue-500 w-fit rounded-lg uppercase text-xs text-white tracking-widest mx-auto px-4 py-0.5">Ciência: Computação</h6>
+			<p id="question-number" class="text-white mt-2">Questão N/N</p>
+			<p class="text-white mt-2">
+				Dificuldade:
+				<span id="question-difficulty" class="bg-blue-500 px-2 py-0.5 rounded-lg uppercase text-xs">X</span>
+			</p>
+		</div>
+
+		<p>Responda corretamente a pergunta abaixo</p>
+
+		<p id="question" class="text-white">Texto</p>
+
+		<div class="mt-8">
+			<ul id="answers" class="text-white flex flex-col gap-y-4">
+				<li>
+					<input type="radio" name="answer" id="question1" value="1">
+					<label for="question1">Pergunta 1</label>
+				</li>
+				<li>
+					<input type="radio" name="answer" id="question2" value="2">
+					<label for="question2">Pergunta 2</label>
+				</li>
+				<li>
+					<input type="radio" name="answer" id="question3" value="3">
+					<label for="question3">Pergunta 3</label>
+				</li>
+				<li>
+					<input type="radio" name="answer" id="question4" value="4">
+					<label for="question4">Pergunta 4</label>
+				</li>
+			</ul>
+
+			<div>
+				<button id="previous" class="mt-8 bg-blue-500 py-2 px-4 text-white rounded-lg">
+					Anterior
+				</button>
+				<button id="next" class="mt-8 bg-blue-500 py-2 px-4 text-white rounded-lg">
+					Próximo
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="score" class="hidden">
+		<div class="flex flex-col">
+			<p class="text-center text-white mt-8">Você acertou X de Y perguntas</p>
+			<button id="restart" class="mt-8 bg-blue-500 py-2 px-4 text-white rounded-lg mx-auto">
+				Recomeçar
+			</button>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+	<script src="./main.js"></script>
+</body>
+</html>
